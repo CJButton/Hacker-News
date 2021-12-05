@@ -9,8 +9,6 @@ import "./App.css";
 /**
  * - Remove icons
  *
- * - Write unit tests
- *
  * - Error Boundary
  *
  */
