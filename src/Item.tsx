@@ -3,9 +3,9 @@ import { ATTR_ITEM_TITLE, ATTR_ITEM_BY, ATTR_ITEM_URL } from "./constants";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import linkIcon from "./icons8-external-link-64.png";
 
-type ItemType = { itemID: number };
+type Props = { itemID: number };
 
-const Item = ({ itemID }: ItemType) => {
+const Item = ({ itemID }: Props) => {
   const { loading, item } = useFetchStory(itemID);
 
   if (loading) {

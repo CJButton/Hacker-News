@@ -8,11 +8,11 @@ import {
 } from "./constants";
 import { API_STORY_TYPES } from "./types";
 
-const StorySelector = ({
-  setStoryType,
-}: {
+type Props = {
   setStoryType: (arg0: API_STORY_TYPES) => void;
-}) => {
+};
+
+const StorySelector = ({ setStoryType }: Props) => {
   const [currentStory, setStory] = useState<API_STORY_TYPES>(
     API_HACKER_NEWS_NEW_STORIES
   );
