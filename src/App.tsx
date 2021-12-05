@@ -1,116 +1,42 @@
-import { useEffect, useState } from "react";
+import { useState, useRef } from "react";
+import InfiniteScroll from "./InfiniteScroll";
+import StorySelector from "./StorySelector";
+import Item from "./Item";
+import { API_HACKER_NEWS_NEW_STORIES } from "./constants";
+import { API_STORY_TYPES } from "./types";
 import "./App.css";
-import { getTopStories, getStory } from "./services";
 
 /**
  * - Remove icons
  *
- * - Activiate Worker
- *
  * - Write unit tests
- *
- * - Research GraphQL
- *
- * - Clean API fetching from firebase hacker news api
- *
- * - Options for BestStories / TopStories
- *
- * - InfiniteScroll
- *
- * - Loader
- *
- * - To Top Button
- *
- * - Add title
- *
- * - Create Item component
- *
- * - Create List component
- *
- * - Refactor into InfiniteScroll or Pagination
- *
- * - Lazy loading of data
  *
  * - Error Boundary
  *
- * - Write types file
- *
- * - Write Constants file
  */
 
-type ItemType = { itemID: number };
-
-export type HackerNewsItemType = {
-  id: number;
-  by: string;
-  descendants: number;
-  kids: number[];
-  score: number;
-  time: number;
-  title: string;
-  type: string;
-  url: string;
-};
-
-const useFetchStory = (itemID: number) => {
-  const [loading, setLoading] = useState(true);
-  const [item, setItem] = useState<HackerNewsItemType>();
-
-  useEffect(() => {
-    const fetchStory = async () => {
-      const res = await getStory(itemID);
-      setItem(res);
-      setLoading(false);
-    };
-    fetchStory();
-  }, [itemID]);
-
-  return { loading, item };
-};
-
-const HackerNewsItem = ({ itemID }: ItemType) => {
-  const { loading, item } = useFetchStory(itemID);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div className="item-wrapper">
-      <h3>{item?.title}</h3>
-      <div>{item?.by}</div>
-    </div>
-  );
-};
-
-const useFetchTopStories = () => {
-  const [loading, setLoading] = useState(true);
-  const [stories, setStories] = useState<number[]>([]);
-
-  useEffect(() => {
-    const fetchStory = async () => {
-      const res = await getTopStories();
-      setStories(res);
-      setLoading(false);
-    };
-    fetchStory();
-  }, []);
-
-  return { loading, stories };
-};
-
 const App = () => {
-  const { loading, stories } = useFetchTopStories();
+  const top = useRef<HTMLDivElement>(null);
+  const [storyType, setStoryType] = useState<API_STORY_TYPES>(
+    API_HACKER_NEWS_NEW_STORIES
+  );
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const returnToTop = () => {
+    top?.current?.scrollIntoView();
+  };
 
   return (
     <div className="stories-wrapper">
-      {stories.map((itemID, idx) => {
-        return <HackerNewsItem itemID={itemID} key={idx} />;
-      })}
+      <div ref={top} />
+      <StorySelector setStoryType={setStoryType} />
+      <InfiniteScroll storyType={storyType}>
+        {(itemID: number) => {
+          return <Item itemID={itemID} key={itemID} />;
+        }}
+      </InfiniteScroll>
+      <button className="to-top-button" onClick={returnToTop}>
+        To Top
+      </button>
     </div>
   );
 };

@@ -9,14 +9,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* background-color: black; */
   height: 100%;
 }
 
 #root {
-  /* background-color: rgb(246, 246, 239); */
-  background-color: black;
-  color: white;
   height: 100%;
   overflow: scroll;
 }
