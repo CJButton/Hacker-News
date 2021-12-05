@@ -6,15 +6,6 @@ import { API_HACKER_NEWS_NEW_STORIES } from "./constants";
 import { API_STORY_TYPES } from "./types";
 import "./App.css";
 
-/**
- * - Remove icons
- *
- * - Write unit tests
- *
- * - Error Boundary
- *
- */
-
 const App = () => {
   const top = useRef<HTMLDivElement>(null);
   const [storyType, setStoryType] = useState<API_STORY_TYPES>(
