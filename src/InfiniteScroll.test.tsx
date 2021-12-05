@@ -3,7 +3,6 @@ import { setupServer } from "msw/node";
 import { render, screen, waitFor } from "@testing-library/react";
 import InfiniteScroll from "./InfiniteScroll";
 
-// const { data } = await instance.get(`${newsType}.json`, {
 const server = setupServer(
   rest.get(
     "https://hacker-news.firebaseio.com/v0/:newsType.json",
