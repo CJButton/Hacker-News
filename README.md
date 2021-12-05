@@ -13,3 +13,7 @@
 - Use of various hooks
 
 - Buttons to allow for switching between various kinds of stories
+
+- Loader state for initial loading of all stories as well as loading of individual items
+
+- Button to allow user to return to instantly top
