@@ -6,9 +6,9 @@ import linkIcon from "./icons8-external-link-64.png";
 type Props = { itemID: number };
 
 const Item = ({ itemID }: Props) => {
-  const { loading, item } = useFetchStory(itemID);
+  const { isLoading, item } = useFetchStory(itemID);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="item-wrapper">
         <PacmanLoader color="rgb(252, 79, 8)" size="10px" />

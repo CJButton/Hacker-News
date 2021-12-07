@@ -20,7 +20,7 @@ type Props = {
 };
 
 const InfiniteScroll = ({ children, storyType }: Props) => {
-  const { loading, stories = [] } = useFetchStories(storyType);
+  const { isLoading, stories = [] } = useFetchStories(storyType);
   const [allStories, setAllStories] = useState(stories);
   const [currentStories, setCurrentStories] = useState<number[]>([]);
 
@@ -29,7 +29,7 @@ const InfiniteScroll = ({ children, storyType }: Props) => {
     setCurrentStories([]);
   }, [stories]);
 
-  if (loading) {
+  if (isLoading) {
     return <CircleLoader color="rgb(252, 79, 8)" size="150px" css={override} />;
   }
 
