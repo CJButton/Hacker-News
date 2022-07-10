@@ -1,0 +1,36 @@
+@import 'src/styles/colors.scss';
+
+.wrapper {
+	display: flex;
+}
+
+.idx {
+	color: $dark-grey;
+	width: 1.5rem;
+	text-align: end;
+	margin-right: 0.1rem;
+}
+
+.title {
+	color: white;
+	text-decoration-color: initial;
+	text-decoration: none;
+
+	&:hover {
+		color: #fffffe;
+	}
+}
+
+.lower-row {
+	color: $dark-grey;
+	font-size: 0.35rem;
+}
+
+.right-side {
+	scroll-margin-left: 0.25rem;
+}
+
+.url {
+	color: $dark-grey;
+	font-size: 0.35rem;
+}

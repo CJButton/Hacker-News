@@ -1,38 +1,70 @@
-import { useFetchStory } from "./hooks";
-import { ATTR_ITEM_TITLE, ATTR_ITEM_BY, ATTR_ITEM_URL } from "./constants";
-import PacmanLoader from "react-spinners/PacmanLoader";
-import linkIcon from "./icons8-external-link-64.png";
+import styles from './Item.module.scss';
+import ItemType from './domains/AlgoliaItem/type';
 
-type Props = { itemID: number };
+const getBaseUrl = (url: string) => {
+	if (!url) return '';
 
-const Item = ({ itemID }: Props) => {
-  const { isLoading, item } = useFetchStory(itemID);
+	return `(${url.replace(/(http(s)?:\/\/)|(\/.*)/g, '')})`;
+};
 
-  if (isLoading) {
-    return (
-      <div className="item-wrapper">
-        <PacmanLoader color="rgb(252, 79, 8)" size="10px" />
-      </div>
-    );
-  }
+type Props = ItemType & {
+	idx: number;
+};
 
-  return (
-    <div className="item-wrapper">
-      <div className="item-title">{item?.[ATTR_ITEM_TITLE]}</div>
-      <div className="item-body">
-        <div className="item-by">by {item?.[ATTR_ITEM_BY]}</div>
-        {item?.[ATTR_ITEM_BY] && (
-          <a
-            href={item?.[ATTR_ITEM_URL]}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src={linkIcon} className="item-link" alt="link-icon"></img>
-          </a>
-        )}
-      </div>
-    </div>
-  );
+const BaseURL = ({ url }: { url: string }) => {
+	const baseUrl = getBaseUrl(url);
+	return <span className={styles.url}>{baseUrl}</span>;
+};
+
+const UppperRow = ({ title, url }: ItemType) => {
+	return (
+		<>
+			<a
+				href={url}
+				target="_blank"
+				rel="noreferrer"
+				className={styles.title}
+			>
+				{`${title} `}
+			</a>
+			<BaseURL url={url} />
+		</>
+	);
+};
+
+const getHoursDifference = (createdAt: string) => {
+	const hoursDifference = Math.floor(
+		Math.abs(new Date().getTime() - new Date(createdAt).getTime()) / 36e5
+	);
+
+	if (hoursDifference >= 24) {
+		const daysAgo = Math.floor(hoursDifference / 24);
+		return `${daysAgo} ${daysAgo > 1 ? 'days' : 'day'} ago`;
+	}
+
+	return `${hoursDifference} ${hoursDifference > 1 ? 'hours' : 'hour'} ago`;
+};
+
+const LowerRow = ({ points, author, num_comments, created_at }: ItemType) => {
+	const hoursDifference = getHoursDifference(created_at);
+
+	return (
+		<div className={styles['lower-row']}>
+			{`${points} points by ${author} ${hoursDifference} | hide | ${' '} ${num_comments} comments `}
+		</div>
+	);
+};
+
+const Item = ({ idx, ...item }: Props) => {
+	return (
+		<div className={styles.wrapper}>
+			<div className={styles.idx}>{`${idx}.`}</div>
+			<div className={styles['right-side']}>
+				<UppperRow {...item} />
+				<LowerRow {...item} />
+			</div>
+		</div>
+	);
 };
 
 export default Item;

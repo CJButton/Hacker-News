@@ -1,35 +1,31 @@
-import { useState, useRef } from "react";
-import InfiniteScroll from "./InfiniteScroll";
-import StorySelector from "./StorySelector";
-import Item from "./Item";
-import { API_HACKER_NEWS_NEW_STORIES } from "./constants";
-import { API_STORY_TYPES } from "./types";
-import "./App.css";
+import axios from 'axios';
+import Item from './Item';
+import InfiniteScroll from './modules/InfiniteScroll/InfiniteScroll';
+import ItemType from './domains/AlgoliaItem/type';
+import { getHits } from './domains/AlgoliaItemList/selectors';
+import styles from './App.module.scss';
 
 const App = () => {
-  const top = useRef<HTMLDivElement>(null);
-  const [storyType, setStoryType] = useState<API_STORY_TYPES>(
-    API_HACKER_NEWS_NEW_STORIES
-  );
+	const fetcher = () => {
+		let page = 1;
+		return async () => {
+			const { data } = await axios.get(
+				`https://hn.algolia.com/api/v1/search_by_date?tags=story&page=${page}`
+			);
+			page += 1;
+			return getHits(data);
+		};
+	};
 
-  const returnToTop = () => {
-    top?.current?.scrollIntoView();
-  };
-
-  return (
-    <div className="stories-wrapper">
-      <div ref={top} />
-      <StorySelector setStoryType={setStoryType} />
-      <InfiniteScroll storyType={storyType}>
-        {(itemID: number) => {
-          return <Item itemID={itemID} key={itemID} />;
-        }}
-      </InfiniteScroll>
-      <button className="to-top-button" onClick={returnToTop}>
-        To Top
-      </button>
-    </div>
-  );
+	return (
+		<div className={styles.wrapper}>
+			<InfiniteScroll fetcher={fetcher()}>
+				{(item: ItemType, idx: number) => {
+					return <Item key={item.objectID} idx={idx + 1} {...item} />;
+				}}
+			</InfiniteScroll>
+		</div>
+	);
 };
 
 export default App;
