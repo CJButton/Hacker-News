@@ -2,13 +2,15 @@
 
 .wrapper {
 	display: flex;
+	height: 3vh;
+	margin: 0.5rem 0;
 }
 
 .idx {
 	color: $dark-grey;
 	width: 1.5rem;
 	text-align: end;
-	margin-right: 0.1rem;
+	margin-right: 0.5rem;
 }
 
 .title {
@@ -23,14 +25,10 @@
 
 .lower-row {
 	color: $dark-grey;
-	font-size: 0.35rem;
-}
-
-.right-side {
-	scroll-margin-left: 0.25rem;
+	font-size: 0.75rem;
 }
 
 .url {
 	color: $dark-grey;
-	font-size: 0.35rem;
+	font-size: 0.75rem;
 }

@@ -10,7 +10,7 @@ const Item = ({ idx, ...item }: Props) => {
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.idx}>{`${idx}.`}</div>
-			<div className={styles['right-side']}>
+			<div>
 				<UppperRow {...item} />
 				<LowerRow {...item} />
 			</div>
