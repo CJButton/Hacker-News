@@ -16,6 +16,7 @@ type Props<T> = {
 };
 
 const InfiniteScroll = <T extends {}>({ children, fetcher }: Props<T>) => {
+	const [cursor, setCursor] = useState(0);
 	const [currentItems, setCurrentItems] = useState<T[]>([]);
 
 	useEffect(() => {
@@ -35,6 +36,7 @@ const InfiniteScroll = <T extends {}>({ children, fetcher }: Props<T>) => {
 	const handleOnEnter = async () => {
 		const res = await fetcher();
 		setCurrentItems([...currentItems, ...res]);
+		setCursor(cursor + 1);
 	};
 
 	return (
@@ -42,7 +44,11 @@ const InfiniteScroll = <T extends {}>({ children, fetcher }: Props<T>) => {
 			{currentItems.map((item: T, idx: number) => {
 				return children(item, idx);
 			})}
-			<Waypoint onEnter={handleOnEnter} bottomOffset="-200px" />
+			<Waypoint
+				key={cursor}
+				onEnter={handleOnEnter}
+				bottomOffset="-20%"
+			/>
 		</div>
 	);
 };
