@@ -1,3 +1,5 @@
+import React, { ReactNode } from 'react';
+import ReactDOM from 'react-dom';
 import ItemType from './domains/AlgoliaItem/type';
 import {
 	ALOGLIA_ITEM_ATTR_TITLE,
@@ -8,6 +10,7 @@ import {
 	ALOGLIA_ITEM_ATTR_CREATED_AT,
 } from './domains/AlgoliaItem/constants';
 import styles from './Item.module.scss';
+import { useState } from 'react';
 
 export const getHoursDifference = (createdAt: string) => {
 	const hoursDifference = Math.floor(
@@ -54,25 +57,83 @@ export const UppperRow = ({ title, url }: UpperRowType) => {
 	);
 };
 
-type LowerRowType = Pick<
-	ItemType,
-	| typeof ALOGLIA_ITEM_ATTR_POINTS
-	| typeof ALOGLIA_ITEM_ATTR_AUTHOR
-	| typeof ALOGLIA_ITEM_ATTR_NUM_COMMENTS
-	| typeof ALOGLIA_ITEM_ATTR_CREATED_AT
->;
+// type LowerRowType = Pick<
+// 	ItemType,
+// 	| typeof ALOGLIA_ITEM_ATTR_POINTS
+// 	| typeof ALOGLIA_ITEM_ATTR_AUTHOR
+// 	| typeof ALOGLIA_ITEM_ATTR_NUM_COMMENTS
+// 	| typeof ALOGLIA_ITEM_ATTR_CREATED_AT
+// >;
+
+const Portal = ({ children }: any) => {
+	const portalElement = document.getElementById('modal-root') as HTMLElement;
+
+	console.log('children?', children);
+	return ReactDOM.createPortal(children, portalElement);
+};
+
+const EmptyComponent = () => <div />;
+
+const usePortal = ({ component }: { component: React.ElementType }) => {
+	const [isOpen, setIsOpen] = useState(false);
+	const [openProps, setOpenProps] = useState({});
+
+	const open = <T extends {}>(args: T) => {
+		setOpenProps(args);
+		setIsOpen(true);
+	};
+
+	const close = () => setIsOpen(false);
+
+	console.log(isOpen, 'isOpen');
+	if (isOpen) {
+		const Component = component;
+		return {
+			open,
+			component: () => <Component close={close} {...openProps} />,
+		};
+	}
+
+	return { open, component: EmptyComponent };
+};
+
+const Test = (props: {
+	testProps: boolean;
+	objectID: string;
+	close: () => void;
+}) => {
+	return (
+		<div onClick={() => props.close()} className={styles.portal}>
+			{props.objectID}
+		</div>
+	);
+};
 
 export const LowerRow = ({
 	points,
 	author,
 	num_comments: numComments,
 	created_at: createdAt,
-}: LowerRowType) => {
+	objectID,
+}: any) => {
 	const hoursDifference = getHoursDifference(createdAt);
 
+	const { component: Modal, open } = usePortal({ component: Test });
+
+	console.log();
+
+	const handleClick = () => {
+		open({ testProps: false, objectID });
+	};
+
 	return (
-		<div className={styles['lower-row']}>
-			{`${points} points by ${author} ${hoursDifference} | hide | ${' '} ${numComments} comments `}
-		</div>
+		<>
+			<div className={styles['lower-row']} onClick={handleClick}>
+				{`${points} points by ${author} ${hoursDifference} | hide | ${' '} ${numComments} comments `}
+			</div>
+			<Portal>
+				<Modal />
+			</Portal>
+		</>
 	);
 };
