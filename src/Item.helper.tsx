@@ -65,10 +65,9 @@ export const UppperRow = ({ title, url }: UpperRowType) => {
 // 	| typeof ALOGLIA_ITEM_ATTR_CREATED_AT
 // >;
 
-const Portal = ({ children }: any) => {
+const Portal = ({ children }: { children: React.ReactNode }) => {
 	const portalElement = document.getElementById('modal-root') as HTMLElement;
 
-	console.log('children?', children);
 	return ReactDOM.createPortal(children, portalElement);
 };
 
@@ -85,12 +84,17 @@ const usePortal = ({ component }: { component: React.ElementType }) => {
 
 	const close = () => setIsOpen(false);
 
-	console.log(isOpen, 'isOpen');
+	// need to have semi-black non-clickable background to prevent clicks below
+	// but probably should be overridable
 	if (isOpen) {
 		const Component = component;
 		return {
 			open,
-			component: () => <Component close={close} {...openProps} />,
+			component: () => (
+				<div className={styles.portal}>
+					<Component close={close} {...openProps} />
+				</div>
+			),
 		};
 	}
 
@@ -103,7 +107,7 @@ const Test = (props: {
 	close: () => void;
 }) => {
 	return (
-		<div onClick={() => props.close()} className={styles.portal}>
+		<div className={styles.modal} onClick={() => props.close()}>
 			{props.objectID}
 		</div>
 	);
@@ -119,8 +123,6 @@ export const LowerRow = ({
 	const hoursDifference = getHoursDifference(createdAt);
 
 	const { component: Modal, open } = usePortal({ component: Test });
-
-	console.log();
 
 	const handleClick = () => {
 		open({ testProps: false, objectID });
