@@ -2,8 +2,8 @@
 
 .wrapper {
 	display: flex;
-	height: 3rem;
-	margin: 0.5rem 0;
+	height: fit-content;
+	margin: 1rem 0;
 }
 
 .idx {
@@ -31,20 +31,4 @@
 .url {
 	color: $dark-grey;
 	font-size: 0.75rem;
-}
-
-.modal {
-	height: 90vh;
-	width: 90vw;
-	margin: 5vh 5vw;
-	background-color: blue;
-}
-
-.portal {
-	position: absolute;
-	top: 0;
-	background-color: black;
-	opacity: 0.5;
-	height: 100vh;
-	width: 100vw;
 }

@@ -1,5 +1,4 @@
-import React, { ReactNode } from 'react';
-import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 import ItemType from './domains/AlgoliaItem/type';
 import {
 	ALOGLIA_ITEM_ATTR_TITLE,
@@ -9,27 +8,13 @@ import {
 	ALOGLIA_ITEM_ATTR_NUM_COMMENTS,
 	ALOGLIA_ITEM_ATTR_CREATED_AT,
 } from './domains/AlgoliaItem/constants';
+import usePortal from './modules/hooks/usePortal';
+import Button, { BUTTON_STYLE_CLEAR } from './modules/Buttons/Button';
+import Portal from './modules/Portal';
+import getHoursDifference from './services/getHoursDifference';
+import getBaseUrl from './services/getBaseUrl';
+import Comments from './Comments';
 import styles from './Item.module.scss';
-import { useState } from 'react';
-
-export const getHoursDifference = (createdAt: string) => {
-	const hoursDifference = Math.floor(
-		Math.abs(new Date().getTime() - new Date(createdAt).getTime()) / 36e5
-	);
-
-	if (hoursDifference >= 24) {
-		const daysAgo = Math.floor(hoursDifference / 24);
-		return `${daysAgo} ${daysAgo > 1 ? 'days' : 'day'} ago`;
-	}
-
-	return `${hoursDifference} ${hoursDifference > 1 ? 'hours' : 'hour'} ago`;
-};
-
-export const getBaseUrl = (url: string) => {
-	if (!url) return '';
-
-	return `(${url.replace(/(http(s)?:\/\/)|(\/.*)/g, '')})`;
-};
 
 export const BaseURL = ({ url }: { url: string }) => {
 	const baseUrl = getBaseUrl(url);
@@ -57,85 +42,51 @@ export const UppperRow = ({ title, url }: UpperRowType) => {
 	);
 };
 
-// type LowerRowType = Pick<
-// 	ItemType,
-// 	| typeof ALOGLIA_ITEM_ATTR_POINTS
-// 	| typeof ALOGLIA_ITEM_ATTR_AUTHOR
-// 	| typeof ALOGLIA_ITEM_ATTR_NUM_COMMENTS
-// 	| typeof ALOGLIA_ITEM_ATTR_CREATED_AT
-// >;
+type LowerRowType = Pick<
+	ItemType,
+	| typeof ALOGLIA_ITEM_ATTR_POINTS
+	| typeof ALOGLIA_ITEM_ATTR_AUTHOR
+	| typeof ALOGLIA_ITEM_ATTR_NUM_COMMENTS
+	| typeof ALOGLIA_ITEM_ATTR_CREATED_AT
+> & { isDisabled: boolean };
 
-const Portal = ({ children }: { children: React.ReactNode }) => {
-	const portalElement = document.getElementById('modal-root') as HTMLElement;
-
-	return ReactDOM.createPortal(children, portalElement);
-};
-
-const EmptyComponent = () => <div />;
-
-const usePortal = ({ component }: { component: React.ElementType }) => {
-	const [isOpen, setIsOpen] = useState(false);
-	const [openProps, setOpenProps] = useState({});
-
-	const open = <T extends {}>(args: T) => {
-		setOpenProps(args);
-		setIsOpen(true);
-	};
-
-	const close = () => setIsOpen(false);
-
-	// need to have semi-black non-clickable background to prevent clicks below
-	// but probably should be overridable
-	if (isOpen) {
-		const Component = component;
-		return {
-			open,
-			component: () => (
-				<div className={styles.portal}>
-					<Component close={close} {...openProps} />
-				</div>
-			),
-		};
-	}
-
-	return { open, component: EmptyComponent };
-};
-
-const Test = (props: {
-	testProps: boolean;
-	objectID: string;
-	close: () => void;
-}) => {
-	return (
-		<div className={styles.modal} onClick={() => props.close()}>
-			{props.objectID}
-		</div>
-	);
-};
-
-export const LowerRow = ({
-	points,
-	author,
-	num_comments: numComments,
-	created_at: createdAt,
-	objectID,
-}: any) => {
-	const hoursDifference = getHoursDifference(createdAt);
-
-	const { component: Modal, open } = usePortal({ component: Test });
+const CommentsButton = ({ isDisabled = false, ...props }: LowerRowType) => {
+	const { component: Modal, open } = usePortal({ component: Comments });
 
 	const handleClick = () => {
-		open({ testProps: false, objectID });
+		open({ ...props });
 	};
+
+	const commentsText =
+		props[ALOGLIA_ITEM_ATTR_NUM_COMMENTS] > 1 ? 'comments' : 'comment';
+
+	if (isDisabled) {
+		return (
+			<div className="ms-1">
+				{`${props[ALOGLIA_ITEM_ATTR_NUM_COMMENTS]} ${commentsText}`}
+			</div>
+		);
+	}
 
 	return (
 		<>
-			<div className={styles['lower-row']} onClick={handleClick}>
-				{`${points} points by ${author} ${hoursDifference} | hide | ${' '} ${numComments} comments `}
-			</div>
-			<Portal>
-				<Modal />
-			</Portal>
+			<Button onClick={handleClick} style={BUTTON_STYLE_CLEAR}>
+				{`${props[ALOGLIA_ITEM_ATTR_NUM_COMMENTS]} ${commentsText}`}
+			</Button>
+			<Portal component={<Modal />} />
 		</>
+	);
+};
+
+export const LowerRow = ({ ...props }: LowerRowType) => {
+	const hoursDifference = getHoursDifference(props.created_at);
+
+	return (
+		<div className={classNames('d-flex', styles['lower-row'])}>
+			{`${props.points} points by ${
+				props.author
+			} ${hoursDifference} | hide | ${' '}`}
+			<CommentsButton {...props} />
+		</div>
 	);
 };

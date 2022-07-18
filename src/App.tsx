@@ -5,7 +5,6 @@ import InfiniteScroll from './modules/InfiniteScroll/InfiniteScroll';
 import ItemType from './domains/AlgoliaItem/type';
 import { getHits } from './domains/AlgoliaItemList/selectors';
 import styles from './App.module.scss';
-import Comments from './Comments';
 
 // https://hn.algolia.com/api/v1/search?tags=comment,story_32082030
 
@@ -30,7 +29,7 @@ const Main = () => {
 		<div className={styles.wrapper}>
 			<InfiniteScroll fetcher={fetcher()}>
 				{(item: ItemType, idx: number) => {
-					return <Item key={item.story_id} idx={idx + 1} {...item} />;
+					return <Item key={item.objectID} idx={idx + 1} {...item} />;
 				}}
 			</InfiniteScroll>
 		</div>

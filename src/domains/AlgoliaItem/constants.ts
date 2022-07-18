@@ -4,3 +4,4 @@ export const ALOGLIA_ITEM_ATTR_POINTS = 'points';
 export const ALOGLIA_ITEM_ATTR_AUTHOR = 'author';
 export const ALOGLIA_ITEM_ATTR_NUM_COMMENTS = 'num_comments';
 export const ALOGLIA_ITEM_ATTR_CREATED_AT = 'created_at';
+export const ALOGLIA_ITEM_ATTR_OBJECT_ID = 'objectID';

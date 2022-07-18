@@ -1,0 +1,29 @@
+@import 'src/styles/colors.scss';
+
+.wrapper {
+	height: 90vh;
+	width: 90vw;
+	margin: 5vh 5vw;
+	background-color: darkslategray;
+	color: white;
+	overflow: scroll;
+	padding: 1rem;
+	border-radius: 5px;
+}
+
+.item {
+	margin-top: 0;
+}
+
+.close-button {
+	height: fit-content;
+}
+
+.comment-wrapper {
+	margin: 1rem;
+}
+
+.header {
+	color: $dark-grey;
+	font-size: 0.75rem;
+}
