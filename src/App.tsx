@@ -6,8 +6,6 @@ import ItemType from './domains/AlgoliaItem/type';
 import { getHits } from './domains/AlgoliaItemList/selectors';
 import styles from './App.module.scss';
 
-// https://hn.algolia.com/api/v1/search?tags=comment,story_32082030
-
 const Main = () => {
 	const fetcher = () => {
 		let page = 1;

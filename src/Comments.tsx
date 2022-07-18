@@ -1,25 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useEffect } from 'react';
 import ItemType from './domains/AlgoliaItem/type';
-import styles from './Comments.module.scss';
 import Item from './Item';
 import Button from './modules/Buttons/Button';
-import getHoursDifference from './services/getHoursDifference';
+import CommentType from './domains/AlgoliaComment/type';
+import Comment from './Comment';
+import styles from './Comments.module.scss';
 
 type Props = {
 	close: () => void;
 } & ItemType;
 
 const Comments = ({ objectID, close, ...props }: Props) => {
-	const [comments, setComments] = useState<any[]>([]);
+	const [comments, setComments] = useState<CommentType[]>([]);
 	useEffect(() => {
 		const fetchComments = async () => {
 			try {
+				// `https://hn.algolia.com/api/v1/search?tags=comment,story_${objectID}`
 				const { data } = await axios.get(
-					`https://hn.algolia.com/api/v1/search?tags=comment,story_${objectID}`
+					`https://hn.algolia.com/api/v1/items/${objectID}`
 				);
-				setComments(data.hits);
+				setComments(data.children);
 			} catch (e) {
 				// TODO: error handling
 				console.error(e);
@@ -43,18 +44,8 @@ const Comments = ({ objectID, close, ...props }: Props) => {
 					X
 				</Button>
 			</div>
-			{comments.map((comment) => {
-				console.log(comment);
-				const hoursDifference = getHoursDifference(comment.created_at);
-				const markup = { __html: comment.comment_text };
-				return (
-					<div className={styles['comment-wrapper']}>
-						<div
-							className={styles.header}
-						>{`${comment.author} ${hoursDifference}`}</div>
-						<div dangerouslySetInnerHTML={markup} />
-					</div>
-				);
+			{comments.map((comment: CommentType) => {
+				return <Comment {...comment} />;
 			})}
 		</div>
 	);
