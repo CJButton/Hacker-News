@@ -6,10 +6,23 @@ const Comment = (comment: CommentType) => {
 	const hoursDifference = getHoursDifference(comment.created_at);
 	const markup = { __html: comment.text };
 
+	const authorText = comment.author ?? 'User Deleted';
+
+	if (!comment.text) {
+		return (
+			<div className={styles['comment-wrapper']}>
+				<div className={styles.header}>
+					{`${authorText} ${hoursDifference}`}
+				</div>
+				<p>Comment Deleted</p>
+			</div>
+		);
+	}
+
 	return (
 		<div className={styles['comment-wrapper']}>
 			<div className={styles.header}>
-				{`${comment.author} ${hoursDifference}`}
+				{`${authorText} ${hoursDifference}`}
 			</div>
 			<div dangerouslySetInnerHTML={markup} />
 			{comment.children.map((childComment) => {

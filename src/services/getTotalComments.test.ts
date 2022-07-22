@@ -1,0 +1,1 @@
+import getTotalComments from './getTotalComments';

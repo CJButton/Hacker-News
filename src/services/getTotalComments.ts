@@ -1,7 +1,12 @@
 import CommentType from '../domains/AlgoliaComment/type';
 
 const getTotalComments = (comments: CommentType[]): number => {
-	let total = comments.length;
+	let total = comments.reduce((accumulator, comment) => {
+		if (comment.text) {
+			accumulator += 1;
+		}
+		return accumulator;
+	}, 0);
 
 	comments.forEach((comment) => {
 		if (comment.children.length) {
