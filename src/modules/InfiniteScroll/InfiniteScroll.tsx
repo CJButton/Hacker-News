@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { css } from '@emotion/react';
 import CircleLoader from 'react-spinners/CircleLoader';
 import { Waypoint } from 'react-waypoint';
@@ -13,9 +14,14 @@ const override = css`
 type Props<T> = {
 	children: (arg0: T, arg1: number) => ReactNode;
 	fetcher: () => Promise<T[]>;
+	className?: string;
 };
 
-const InfiniteScroll = <T extends {}>({ children, fetcher }: Props<T>) => {
+const InfiniteScroll = <T extends {}>({
+	children,
+	fetcher,
+	className = '',
+}: Props<T>) => {
 	const [cursor, setCursor] = useState(0);
 	const [currentItems, setCurrentItems] = useState<T[]>([]);
 
@@ -40,7 +46,7 @@ const InfiniteScroll = <T extends {}>({ children, fetcher }: Props<T>) => {
 	};
 
 	return (
-		<div className={styles.wrapper}>
+		<div className={classNames(styles.wrapper, className)}>
 			{currentItems.map((item: T, idx: number) => {
 				return children(item, idx);
 			})}

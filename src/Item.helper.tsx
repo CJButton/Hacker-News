@@ -13,7 +13,7 @@ import Button, { BUTTON_STYLE_CLEAR } from './modules/Buttons/Button';
 import Portal from './modules/Portal';
 import getHoursDifference from './services/getHoursDifference';
 import getBaseUrl from './services/getBaseUrl';
-import Comments from './Comments';
+import CommentsModal from './CommentsModal';
 import styles from './Item.module.scss';
 
 export const BaseURL = ({ url }: { url: string }) => {
@@ -51,7 +51,7 @@ type LowerRowType = Pick<
 > & { isDisabled: boolean };
 
 const CommentsButton = ({ isDisabled = false, ...props }: LowerRowType) => {
-	const { component: Modal, open } = usePortal({ component: Comments });
+	const { component: Modal, open } = usePortal({ component: CommentsModal });
 
 	const handleClick = () => {
 		open({ ...props });

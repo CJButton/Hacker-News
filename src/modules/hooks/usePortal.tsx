@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './usePortal.module.scss';
 
-const EmptyComponent = () => <div />;
+const EmptyComponent = () => null;
 
 const usePortal = ({ component }: { component: React.ElementType }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -19,12 +19,12 @@ const usePortal = ({ component }: { component: React.ElementType }) => {
 		return {
 			open,
 			component: () => (
-				<div>
+				<>
 					<div className={styles.background}></div>
 					<div className={styles.portal}>
 						<Component close={close} {...openProps} />
 					</div>
-				</div>
+				</>
 			),
 		};
 	}

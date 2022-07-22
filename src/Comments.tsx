@@ -2,50 +2,69 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ItemType from './domains/AlgoliaItem/type';
 import Item from './Item';
-import Button from './modules/Buttons/Button';
 import CommentType from './domains/AlgoliaComment/type';
 import Comment from './Comment';
 import styles from './Comments.module.scss';
+import { useParams } from 'react-router-dom';
 
-type Props = {
-	close: () => void;
-} & ItemType;
+type CommentParent = {
+	author: string;
+	children: CommentType[];
+	created_at: string;
+	created_at_i: number;
+	id: number;
+	options: any;
+	parent_id: number | null;
+	points: number;
+	story_id: number | null;
+	text: string;
+	title: string;
+	type: string;
+	url: string;
+};
 
-const Comments = ({ objectID, close, ...props }: Props) => {
-	const [comments, setComments] = useState<CommentType[]>([]);
+const Comments = () => {
+	const [commentParent, setCommentParent] = useState<CommentParent>();
+
+	const { id } = useParams() as { id: string };
+
 	useEffect(() => {
 		const fetchComments = async () => {
 			try {
-				// `https://hn.algolia.com/api/v1/search?tags=comment,story_${objectID}`
-				const { data } = await axios.get(
-					`https://hn.algolia.com/api/v1/items/${objectID}`
+				const { data } = await axios.get<CommentParent>(
+					`https://hn.algolia.com/api/v1/items/${id}`
 				);
-				setComments(data.children);
-			} catch (e) {
-				// TODO: error handling
-				console.error(e);
-				return [];
-			}
+				setCommentParent(data);
+			} catch (e) {}
 		};
-
 		fetchComments();
-	}, [objectID]);
+	}, [id]);
+
+	if (!commentParent?.children) {
+		// TODO: Replace with loader
+		return null;
+	}
+
+	const { children: comments, text, title, url, ...props } = commentParent;
+
+	const convertedItem: ItemType = {
+		...props,
+		comment_text: text,
+		num_comments: 1,
+		objectID: id,
+		story_id: parseInt(id),
+		story_text: text,
+		story_title: null,
+		story_url: null,
+		title: title,
+		url: url,
+	};
 
 	return (
 		<div className={styles.wrapper}>
-			<div className="d-flex justify-content-between">
-				<Item
-					{...props}
-					objectID={objectID}
-					className={styles.item}
-					isDisabled
-				/>
-				<Button className={styles['close-button']} onClick={close}>
-					X
-				</Button>
-			</div>
+			<Item {...convertedItem} />
 			{comments.map((comment: CommentType) => {
-				return <Comment {...comment} />;
+				return <Comment {...comment} key={comment.id} />;
 			})}
 		</div>
 	);

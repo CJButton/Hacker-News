@@ -1,16 +1,19 @@
 @import 'src/styles/colors.scss';
 
 .wrapper {
-	margin: 0vh 5vw;
+	height: 90vh;
+	width: 90vw;
+	margin: 5vh 5vw;
 	background-color: #f6f6ef;
+	overflow: scroll;
 	padding: 1rem;
 	border-radius: 5px;
-	color: black;
-	height: 100vh;
-	overflow-y: scroll;
-	overflow-x: hidden;
 }
 
 .item {
 	margin-top: 0;
+}
+
+.close-button {
+	height: fit-content;
 }

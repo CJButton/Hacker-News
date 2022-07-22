@@ -14,7 +14,7 @@ const Comment = (comment: CommentType) => {
 			<div dangerouslySetInnerHTML={markup} />
 			{comment.children.map((childComment) => {
 				// @ts-ignore
-				return <Comment {...childComment} />;
+				return <Comment {...childComment} key={childComment.id} />;
 			})}
 		</div>
 	);
