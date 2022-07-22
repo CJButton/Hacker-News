@@ -6,46 +6,18 @@ import CommentType from './domains/AlgoliaComment/type';
 import Comment from './Comment';
 import styles from './Comments.module.scss';
 import { useParams } from 'react-router-dom';
-
-// TODO: move to type component
-type CommentParent = {
-	author: string;
-	children: CommentType[];
-	created_at: string;
-	created_at_i: number;
-	id: number;
-	options: any;
-	parent_id: number | null;
-	points: number;
-	story_id: number | null;
-	text: string;
-	title: string;
-	type: string;
-	url: string;
-};
-
-// TODO: move to utility with test
-const countComments = (comments: CommentType[]): number => {
-	let total = comments.length;
-
-	comments.forEach((comment) => {
-		if (comment.children.length) {
-			total += countComments(comment.children);
-		}
-	});
-
-	return total;
-};
+import ItemParent from './domains/AlgoliaItems/type';
+import getTotalComments from './services/getTotalComments';
 
 const Comments = () => {
-	const [commentParent, setCommentParent] = useState<CommentParent>();
+	const [commentParent, setCommentParent] = useState<ItemParent>();
 
 	const { id } = useParams() as { id: string };
 
 	useEffect(() => {
 		const fetchComments = async () => {
 			try {
-				const { data } = await axios.get<CommentParent>(
+				const { data } = await axios.get<ItemParent>(
 					`https://hn.algolia.com/api/v1/items/${id}`
 				);
 				setCommentParent(data);
@@ -55,7 +27,7 @@ const Comments = () => {
 	}, [id]);
 
 	const totalComments = useMemo(
-		() => countComments(commentParent?.children ?? []),
+		() => getTotalComments(commentParent?.children ?? []),
 		[commentParent?.children]
 	);
 
@@ -78,8 +50,6 @@ const Comments = () => {
 		title: title,
 		url: url,
 	};
-
-	console.log('total comments', totalComments);
 
 	return (
 		<div className={styles.wrapper}>
