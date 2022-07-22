@@ -8,9 +8,9 @@ const Comment = (comment: CommentType) => {
 
 	return (
 		<div className={styles['comment-wrapper']}>
-			<div
-				className={styles.header}
-			>{`${comment.author} ${hoursDifference}`}</div>
+			<div className={styles.header}>
+				{`${comment.author} ${hoursDifference}`}
+			</div>
 			<div dangerouslySetInnerHTML={markup} />
 			{comment.children.map((childComment) => {
 				// @ts-ignore

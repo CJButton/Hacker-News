@@ -1,4 +1,4 @@
-type CommentType = {
+type Comment = {
 	author: string;
 	children: Comment[];
 	created_at: string;
@@ -14,4 +14,4 @@ type CommentType = {
 	url: string | null;
 };
 
-export default CommentType;
+export default Comment;

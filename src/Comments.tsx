@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import axios from 'axios';
 import ItemType from './domains/AlgoliaItem/type';
 import Item from './Item';
@@ -7,6 +7,7 @@ import Comment from './Comment';
 import styles from './Comments.module.scss';
 import { useParams } from 'react-router-dom';
 
+// TODO: move to type component
 type CommentParent = {
 	author: string;
 	children: CommentType[];
@@ -21,6 +22,19 @@ type CommentParent = {
 	title: string;
 	type: string;
 	url: string;
+};
+
+// TODO: move to utility with test
+const countComments = (comments: CommentType[]): number => {
+	let total = comments.length;
+
+	comments.forEach((comment) => {
+		if (comment.children.length) {
+			total += countComments(comment.children);
+		}
+	});
+
+	return total;
 };
 
 const Comments = () => {
@@ -40,6 +54,11 @@ const Comments = () => {
 		fetchComments();
 	}, [id]);
 
+	const totalComments = useMemo(
+		() => countComments(commentParent?.children ?? []),
+		[commentParent?.children]
+	);
+
 	if (!commentParent?.children) {
 		// TODO: Replace with loader
 		return null;
@@ -50,7 +69,7 @@ const Comments = () => {
 	const convertedItem: ItemType = {
 		...props,
 		comment_text: text,
-		num_comments: 1,
+		num_comments: totalComments,
 		objectID: id,
 		story_id: parseInt(id),
 		story_text: text,
@@ -59,6 +78,8 @@ const Comments = () => {
 		title: title,
 		url: url,
 	};
+
+	console.log('total comments', totalComments);
 
 	return (
 		<div className={styles.wrapper}>
