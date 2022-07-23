@@ -38,6 +38,7 @@ const Comments = () => {
 
 	const { children: comments, text, title, url, ...props } = commentParent;
 
+	// TODO: replace with constants
 	const convertedItem: ItemType = {
 		...props,
 		comment_text: text,
