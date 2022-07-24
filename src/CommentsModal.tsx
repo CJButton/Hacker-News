@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import useEffectOnce from './services/useEffectOnce';
 import ItemType from './domains/AlgoliaItem/type';
 import Item from './Item';
 import Button from './modules/Buttons/Button';
@@ -18,9 +19,9 @@ const Comments = ({ objectID, close, ...props }: Props) => {
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 
-	useEffect(() => {
+	useEffectOnce(() => {
 		navigate(`?i=${objectID}`, { replace: true });
-	}, [navigate, objectID]);
+	});
 
 	useEffect(() => {
 		const fetchComments = async () => {

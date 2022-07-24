@@ -1,5 +1,5 @@
-import { useEffect, EffectCallback } from 'react';
 import { useLocation } from 'react-router-dom';
+import useEffectOnce from './services/useEffectOnce';
 import { parse } from 'query-string';
 import {
 	BrowserRouter,
@@ -10,10 +10,6 @@ import {
 } from 'react-router-dom';
 import Comments from './Comments';
 import LatestStories from './LatestStories';
-
-const useEffectOnce = (callback: EffectCallback) =>
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	useEffect(callback, []);
 
 const Wrapper = () => {
 	const { search } = useLocation();
