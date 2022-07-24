@@ -3,6 +3,7 @@ import Item from './Item';
 import InfiniteScroll from './modules/InfiniteScroll/InfiniteScroll';
 import ItemType from './domains/AlgoliaItem/type';
 import { getHits } from './domains/AlgoliaItemList/selectors';
+import AlgoliaItems from './domains/AlgoliaItemList/type';
 import styles from './LatestStories.module.scss';
 
 const LatestStories = () => {
@@ -10,7 +11,7 @@ const LatestStories = () => {
 		let page = 1;
 		return async () => {
 			try {
-				const { data } = await axios.get(
+				const { data } = await axios.get<AlgoliaItems>(
 					`https://hn.algolia.com/api/v1/search_by_date?tags=story&page=${page}`
 				);
 				page += 1;
