@@ -9,6 +9,7 @@ import {
 	useNavigate,
 } from 'react-router-dom';
 import Comments from './Comments';
+import TopBar from './Topbar';
 import LatestStories from './LatestStories';
 
 const Wrapper = () => {
@@ -23,7 +24,12 @@ const Wrapper = () => {
 		}
 	});
 
-	return <Outlet />;
+	return (
+		<>
+			<TopBar />
+			<Outlet />
+		</>
+	);
 };
 
 const App = () => {

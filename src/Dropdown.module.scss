@@ -1,0 +1,33 @@
+@import 'src/styles/colors.scss';
+
+.value {
+	border: white solid 1px;
+	border-radius: 3px;
+	margin-bottom: 0.25rem;
+	padding-left: 0.25rem;
+	width: 5rem;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.background {
+	background-color: white;
+	width: 5rem;
+	border-radius: 3px;
+	color: black;
+	border: $hn-orange solid 1px;
+}
+
+.option {
+	padding-left: 0.25rem;
+	border-bottom: 1px $hn-orange solid;
+	&:hover {
+		cursor: pointer;
+	}
+
+	&:last-child {
+		border-bottom: none;
+	}
+}

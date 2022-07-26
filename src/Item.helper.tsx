@@ -51,7 +51,7 @@ type LowerRowType = Pick<
 > & { isDisabled: boolean };
 
 const CommentsButton = ({ isDisabled = false, ...props }: LowerRowType) => {
-	const { component: Modal, open } = usePortal({ component: CommentsModal });
+	const { open, ...modalProps } = usePortal({ component: CommentsModal });
 
 	const handleClick = () => {
 		open({ ...props });
@@ -73,7 +73,7 @@ const CommentsButton = ({ isDisabled = false, ...props }: LowerRowType) => {
 			<Button onClick={handleClick} style={BUTTON_STYLE_CLEAR}>
 				{`${props[ALOGLIA_ITEM_ATTR_NUM_COMMENTS]} ${commentsText}`}
 			</Button>
-			<Portal component={<Modal />} />
+			<Portal {...modalProps} />
 		</>
 	);
 };
@@ -85,7 +85,7 @@ export const LowerRow = ({ ...props }: LowerRowType) => {
 		<div className={classNames('d-flex', styles['lower-row'])}>
 			{`${props.points} points by ${
 				props.author
-			} ${hoursDifference} | hide | ${' '}`}
+			} ${hoursDifference} | ${' '}`}
 			<CommentsButton {...props} />
 		</div>
 	);

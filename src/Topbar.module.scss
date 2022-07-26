@@ -1,0 +1,14 @@
+@import 'src/styles/colors.scss';
+@import 'src/styles/constants.scss';
+
+.topbar {
+	height: $header-height;
+	background-color: $hn-orange;
+	margin: 0 6rem;
+	padding: 4px;
+}
+
+.logo {
+	height: 100%;
+	border: solid 1px white;
+}

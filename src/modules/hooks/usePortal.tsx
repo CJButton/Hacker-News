@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import styles from './usePortal.module.scss';
 
-const EmptyComponent = () => null;
-
 const usePortal = ({ component }: { component: React.ElementType }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [openProps, setOpenProps] = useState({});
@@ -16,9 +14,10 @@ const usePortal = ({ component }: { component: React.ElementType }) => {
 
 	if (isOpen) {
 		const Component = component;
+
 		return {
 			open,
-			component: () => (
+			component: (
 				<>
 					<div className={styles.background}></div>
 					<div className={styles.portal}>
@@ -29,7 +28,7 @@ const usePortal = ({ component }: { component: React.ElementType }) => {
 		};
 	}
 
-	return { open, component: EmptyComponent };
+	return { open, component: null };
 };
 
 export default usePortal;
