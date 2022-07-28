@@ -1,25 +1,37 @@
-import { useState } from 'react';
-// import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 import styles from './Dropdown.module.scss';
 
+export type DropdownProp<T> = { value: T; label: string };
+
 type Props<T> = {
-	values: T[];
+	values: DropdownProp<T>[];
+	handleChange?: (arg0: DropdownProp<T>) => void;
 };
 
-const Dropdown = <T extends {}>({ values }: Props<T>) => {
+const Dropdown = <T extends {}>({
+	values,
+	handleChange = () => null,
+}: Props<T>) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [active, setActive] = useState<T>(values[0]);
+	const [active, setActive] = useState<DropdownProp<T>>(values[0]);
 
-	const setValue = (val: T) => {
+	const setValue = (val: DropdownProp<T>) => {
 		setActive(val);
 		setIsOpen(false);
 	};
 
+	useEffect(() => {
+		handleChange(active);
+	}, [active, handleChange]);
+
 	return (
-		<div className="ms-2 position-relative">
-			<div className={styles.value} onClick={() => setIsOpen(!isOpen)}>
-				{active}
-			</div>
+		<div
+			className="ms-2 position-relative"
+			tabIndex={1}
+			onBlur={() => setIsOpen(false)}
+			onClick={() => setIsOpen(!isOpen)}
+		>
+			<div className={styles.value}>{active.label}</div>
 			{isOpen && (
 				<div className={styles.background}>
 					{values.map((val) => {
@@ -27,8 +39,9 @@ const Dropdown = <T extends {}>({ values }: Props<T>) => {
 							<div
 								className={styles.option}
 								onClick={() => setValue(val)}
+								key={val.label}
 							>
-								{val}
+								{val.label}
 							</div>
 						);
 					})}

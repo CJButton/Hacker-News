@@ -1,44 +1,33 @@
-import { useLocation } from 'react-router-dom';
-import useEffectOnce from './services/useEffectOnce';
-import { parse } from 'query-string';
-import {
-	BrowserRouter,
-	Routes,
-	Route,
-	Outlet,
-	useNavigate,
-} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Comments from './Comments';
-import TopBar from './Topbar';
-import LatestStories from './LatestStories';
+import LatestStories from './features/stories/LatestStories';
+import OneDayAgoStories from './features/stories/OneDayAgoStories';
+import Wrapper from './Wrapper';
 
-const Wrapper = () => {
-	const { search } = useLocation();
-	const navigate = useNavigate();
-
-	const { i } = parse(search);
-
-	useEffectOnce(() => {
-		if (i) {
-			navigate(`item/${i}`);
-		}
-	});
-
-	return (
-		<>
-			<TopBar />
-			<Outlet />
-		</>
-	);
-};
+const ROUTE_BASE_STORIES = 'stories';
+const ROUTE_BASE_STORIES_LATEST = 'latest';
+export const ROUTE_STORIES_LATEST = `${ROUTE_BASE_STORIES}/${ROUTE_BASE_STORIES_LATEST}`;
+const ROUTE_BASE_STORIES_ONE_DAY_AGO = 'one-day-ago';
+export const ROUTE_STORIES_ONE_DAY_AGO = `${ROUTE_BASE_STORIES}/${ROUTE_BASE_STORIES_ONE_DAY_AGO}`;
+const ROUTE_BASE_ITEM = 'item';
 
 const App = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<Wrapper />}>
-					<Route path="latest" element={<LatestStories />} />
-					<Route path="item/:id" element={<Comments />} />
+					<Route
+						path={ROUTE_STORIES_LATEST}
+						element={<LatestStories />}
+					/>
+					<Route
+						path={ROUTE_STORIES_ONE_DAY_AGO}
+						element={<OneDayAgoStories />}
+					/>
+					<Route
+						path={`${ROUTE_BASE_ITEM}/:id`}
+						element={<Comments />}
+					/>
 				</Route>
 			</Routes>
 		</BrowserRouter>

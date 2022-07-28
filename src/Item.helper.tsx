@@ -10,7 +10,7 @@ import {
 } from './domains/AlgoliaItem/constants';
 import usePortal from './modules/hooks/usePortal';
 import Button, { BUTTON_STYLE_CLEAR } from './modules/Buttons/Button';
-import Portal from './modules/Portal';
+import Portal from './modules/Portal/Portal';
 import getHoursDifference from './services/getHoursDifference';
 import getBaseUrl from './services/getBaseUrl';
 import CommentsModal from './CommentsModal';
