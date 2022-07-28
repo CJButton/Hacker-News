@@ -3,6 +3,7 @@ import useEffectOnce from './services/useEffectOnce';
 import { parse } from 'query-string';
 import { Outlet, useNavigate } from 'react-router-dom';
 import TopBar from './modules/TopBar/Topbar';
+import { ROUTE_BASE_ITEM } from './App';
 
 const Wrapper = () => {
 	const { search } = useLocation();
@@ -12,7 +13,7 @@ const Wrapper = () => {
 
 	useEffectOnce(() => {
 		if (i) {
-			navigate(`item/${i}`);
+			navigate(`${ROUTE_BASE_ITEM}/${i}`);
 		}
 	});
 

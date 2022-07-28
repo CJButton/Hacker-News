@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './Dropdown.module.scss';
 
 export type DropdownProp<T> = { value: T; label: string };
@@ -6,23 +6,22 @@ export type DropdownProp<T> = { value: T; label: string };
 type Props<T> = {
 	values: DropdownProp<T>[];
 	handleChange?: (arg0: DropdownProp<T>) => void;
+	defaultValue: DropdownProp<T>;
 };
 
 const Dropdown = <T extends {}>({
 	values,
 	handleChange = () => null,
+	defaultValue,
 }: Props<T>) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [active, setActive] = useState<DropdownProp<T>>(values[0]);
+	const [active, setActive] = useState<DropdownProp<T>>(defaultValue);
 
 	const setValue = (val: DropdownProp<T>) => {
+		handleChange(val);
 		setActive(val);
 		setIsOpen(false);
 	};
-
-	useEffect(() => {
-		handleChange(active);
-	}, [active, handleChange]);
 
 	return (
 		<div
