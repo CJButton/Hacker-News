@@ -2,8 +2,9 @@ import { ReactNode, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { css } from '@emotion/react';
 import CircleLoader from 'react-spinners/CircleLoader';
-import { Waypoint } from 'react-waypoint';
+// import { Waypoint } from 'react-waypoint';
 import styles from './InfiniteScroll.module.scss';
+import Waypoint from '../Waypoint/Waypoint';
 
 const override = css`
 	top: 40%;
@@ -22,7 +23,7 @@ const InfiniteScroll = <T extends {}>({
 	fetcher,
 	className = '',
 }: Props<T>) => {
-	const [cursor, setCursor] = useState(0);
+	// const [cursor, setCursor] = useState(0);
 	const [currentItems, setCurrentItems] = useState<T[]>([]);
 
 	useEffect(() => {
@@ -39,10 +40,9 @@ const InfiniteScroll = <T extends {}>({
 		);
 	}
 
-	const handleOnEnter = async () => {
+	const handleEnter = async () => {
 		const res = await fetcher();
 		setCurrentItems([...currentItems, ...res]);
-		setCursor(cursor + 1);
 	};
 
 	return (
@@ -50,11 +50,12 @@ const InfiniteScroll = <T extends {}>({
 			{currentItems.map((item: T, idx: number) => {
 				return children(item, idx);
 			})}
-			<Waypoint
+			<Waypoint handleEnter={handleEnter} />
+			{/* <Waypoint
 				key={cursor}
 				onEnter={handleOnEnter}
 				bottomOffset="-20%"
-			/>
+			/> */}
 		</div>
 	);
 };

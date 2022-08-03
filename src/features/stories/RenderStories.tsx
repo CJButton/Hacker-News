@@ -12,7 +12,13 @@ const RenderStories = ({ fetcher }: Props) => {
 		<div className={styles.wrapper}>
 			<InfiniteScroll fetcher={fetcher}>
 				{(item: ItemType, idx: number) => {
-					return <Item key={item.objectID} idx={idx + 1} {...item} />;
+					return (
+						<Item
+							key={item.objectID + idx}
+							idx={idx + 1}
+							{...item}
+						/>
+					);
 				}}
 			</InfiniteScroll>
 		</div>

@@ -1,11 +1,13 @@
 @import 'src/styles/colors.scss';
 
 .value {
-	border: white solid 1px;
+	background-color: white;
 	border-radius: 3px;
 	margin-bottom: 0.25rem;
-	padding-left: 0.25rem;
+	padding-left: 0.5rem;
 	width: 10rem;
+	color: black;
+	height: 100%;
 
 	&:hover {
 		cursor: pointer;
@@ -18,11 +20,13 @@
 	border-radius: 3px;
 	color: black;
 	border: $hn-orange solid 1px;
+	height: fit-content;
 }
 
 .option {
-	padding-left: 0.25rem;
+	padding: 0.5rem;
 	border-bottom: 1px $hn-orange solid;
+
 	&:hover {
 		cursor: pointer;
 	}
